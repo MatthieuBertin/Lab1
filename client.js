@@ -1,21 +1,20 @@
+// Bug : can't erase msg and lmsg in the same function (onchange) or need to identify the parent of this...
+
+
 displayView = function() {
 
 };
 
 window.onload = function() {
 	document.getElementById("content").innerHTML = document.getElementById("welcomeview").innerHTML;
-	var inputs = document.getElementsByTagName("input");
-	var i;
-	console.log(inputs.length);
-	for (i = 0; i < inputs.length; i++) {
-		console.log("lol");
-		inputs.item(i).onchange = function() { console.log("ok"); this.style.border = "2px inset"; };
-	}
 	
+	var inputs = document.getElementsByTagName("input");
+	for (var i = 0; i < inputs.length; i++)
+		inputs.item(i).onchange = function() { document.getElementById("msg").innerHTML = ""; this.style.border = "2px inset"; };	
+		
+//	document.forms["signup"].onsubmit = signUp();
+//	document.forms["login"].onsubmit = login();
 };
-
-
-
 
 function signUp() {
 
@@ -49,31 +48,41 @@ function signUp() {
 		
 		
 		var result = serverstub.signUp(user);
-		console.log(result);
+		
 		if (!result.success) {
-		console.log("foiré");
+		
 			document.forms["signup"]["email"].style.border = "2px inset red";
 			document.getElementById("msg").style.color = "red";
 			document.getElementById("msg").innerHTML = result.message;
+			
 		} else {
-		console.log("ok");
-	/*		document.getElementById("msg").style.color = green;
+		
+			document.getElementById("msg").style.color = "green";
 			document.getElementById("msg").innerHTML = result.message;
 			
 			var fields = document.forms["signup"].getElementsByTagName("input");
 			for (var i = 0; i < fields.length; i++) 
-				fields.item(i).value = "";*/
+				fields.item(i).value = "";
 		}
 	}
 };
 
-var login = function(formData) {
+function login() {
 
-	var msg = "";
-	if (formData.lemail.value && formData.lpwd) 
-		console.log("all work");
-	else
-		msg = "There is an empty field";
+	var email = document.forms["login"]["lemail"];
+	var password = document.forms["login"]["lpwd"];
 	
-	document.getElementById("lmsg").innerHTML = msg;
+	if (!email.value) email.style.border = "2px inset red";
+	else if (!password.value) password.style.border = "2px inset red";
+	else {
+		var result = serverstub.signIn(email.value, password.value);
+		if (!result.success) {
+			email.style.border = "2px inset red";
+			password.style.border = "2px inset red";
+			document.getElementById("lmsg").style.color = "red";
+			document.getElementById("lmsg").innerHTML = result.message;
+		} else {
+			localStorage.setItem("token", JSON.stringify(result.data));
+		}
+	}
 };
