@@ -20,10 +20,10 @@ body{
 
 #login {
     background-color:#FFF;
-    height:78px;
+    height:83px;
     width:248px;
     float:right;
-    margin-bottom:10px;
+    margin-bottom:5px;
 padding-top:10px;
     border:1px solid black;
 }
@@ -35,6 +35,10 @@ padding-top:10px;
     float:right;
     border:1px solid black;
     text-align:center;
+}
+
+h2 {
+margin:15px;
 }
 
 label {
@@ -53,8 +57,5 @@ input, select{
 
 input[type=submit]{
     width:auto;
-}
-
-#msg, #lmsg {
-	color:red;
+	margin-top:5px;
 }

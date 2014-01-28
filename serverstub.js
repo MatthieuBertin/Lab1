@@ -111,6 +111,7 @@ serverstub.signOut = function(token){
 };
 serverstub.signUp = function(formData){ // {email, password, firstname, familyname, gender, city, country}
     if (users[formData.email] === undefined){
+		console.log("test");
         if(formData.email != undefined && formData.password != undefined && formData.firstname != undefined && formData.familyname != undefined && formData.gender != undefined && formData.city != undefined && formData.country != undefined){
             var user = {"email": formData.email,
                 "password": formData.password,
