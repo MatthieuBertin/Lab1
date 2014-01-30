@@ -2,16 +2,30 @@
 
 
 displayView = function() {
-
+	
+	if (localStorage.getItem("token") != null) {
+		document.getElementById("content").innerHTML = document.getElementById("profileview").innerHTML;
+		
+		// Tab handling
+		document.getElementById("home").onclick = tabHandlerHome;
+		document.getElementById("browse").onclick = tabHandlerBrowse;
+		document.getElementById("account").onclick = tabHandlerAccount;
+		
+		// Signout
+		document.getElementById("signout").onclick = signOut;
+	}
+	else {
+		document.getElementById("content").innerHTML = document.getElementById("welcomeview").innerHTML;
+		var inputs = document.getElementsByTagName("input");
+		for (var i = 0; i < inputs.length; i++)
+			inputs.item(i).onchange = function() { document.getElementById("msg").innerHTML = ""; this.style.border = "2px inset"; };	
+	}
 };
 
 window.onload = function() {
-	document.getElementById("content").innerHTML = document.getElementById("welcomeview").innerHTML;
 	
-	var inputs = document.getElementsByTagName("input");
-	for (var i = 0; i < inputs.length; i++)
-		inputs.item(i).onchange = function() { document.getElementById("msg").innerHTML = ""; this.style.border = "2px inset"; };	
-		
+	displayView();
+	
 //	document.forms["signup"].onsubmit = signUp();
 //	document.forms["login"].onsubmit = login();
 };
@@ -32,11 +46,13 @@ function signUp() {
 	var pwd = document.forms["signup"]["pwd"];
 	var repwd = document.forms["signup"]["repwd"];
 	
-	if(err = pwd.value != repwd.value) 
+	if(pwd.value != repwd.value) {
 		pwd.value = repwd.value = "";
-
+		err = true;
+	}
 	
 	if(!err) {		
+		
 		var user = new Object();
 		user.email = document.forms["signup"]["email"].value;
 		user.password = document.forms["signup"]["pwd"].value;
@@ -73,9 +89,12 @@ function login() {
 	var password = document.forms["login"]["lpwd"];
 	
 	if (!email.value) email.style.border = "2px inset red";
-	else if (!password.value) password.style.border = "2px inset red";
-	else {
+	if (!password.value) password.style.border = "2px inset red";
+	
+	if (email.value && password.value) {
+	
 		var result = serverstub.signIn(email.value, password.value);
+	
 		if (!result.success) {
 			email.style.border = "2px inset red";
 			password.style.border = "2px inset red";
@@ -83,6 +102,32 @@ function login() {
 			document.getElementById("lmsg").innerHTML = result.message;
 		} else {
 			localStorage.setItem("token", JSON.stringify(result.data));
+			displayView();
 		}
 	}
+};
+
+function tabHandlerHome() { tabHandler("home"); };
+function tabHandlerBrowse() { tabHandler("browse"); };
+function tabHandlerAccount() { tabHandler("account"); };
+
+function tabHandler(tab) { 
+			console.log("tabHandler : " + tab);
+			var buttons = document.getElementById("tabBar").getElementsByTagName("a");
+			for(var i = 0; i < buttons.length; i++)
+				buttons.item(i).className = "";
+			
+			document.getElementById("homePanel").style.display = "none";
+			document.getElementById("browsePanel").style.display = "none";
+			document.getElementById("accountPanel").style.display = "none";
+			
+			document.getElementById(tab).className="selected";
+			document.getElementById(tab + "Panel").style.display = "block";
+};
+
+function signOut() {
+	
+	serverstub.signOut(localStorage.getItem("token"));
+	localStorage.removeItem("token");
+	displayView();
 };

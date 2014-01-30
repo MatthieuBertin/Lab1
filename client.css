@@ -1,14 +1,15 @@
-body{
-    background:#2255FF;
+body {
+    background:#8FBCDB;
 }
 
 #content{
     margin:auto;
     margin-top:100px;
     width:600px;
-    height:400px;
+    min-height:400px;
 }
 
+/***** WELCOME VIEW *****/
 #logo {
     background-color:#FFF;
     height:398px;
@@ -24,7 +25,7 @@ body{
     width:248px;
     float:right;
     margin-bottom:5px;
-padding-top:10px;
+	padding-top:10px;
     border:1px solid black;
 }
 
@@ -38,7 +39,7 @@ padding-top:10px;
 }
 
 h2 {
-margin:15px;
+	margin:15px;
 }
 
 label {
@@ -58,4 +59,93 @@ input, select{
 input[type=submit]{
     width:auto;
 	margin-top:5px;
+}
+
+/***** PROFILE VIEW *****/
+#tabBar img {
+	float:right;
+	height:18px;
+	margin-right:15px;
+}
+
+#tabBar a {
+	display:block;
+	float:left;
+	height:23px;
+	padding-top:2px;
+	width:100px;
+	background:#447294;	
+	margin-right:10px;
+	text-align:center;
+	color:#fff;
+	text-decoration:none;
+	font-weight:bold;
+}
+
+#tabBar a:hover {
+	background:#153450;
+	color:#fff;
+}
+
+#tabBar .selected {
+	background:#fff;
+	color:#000;
+}
+
+.panel {
+	text-align:center;
+	background: #fff;
+	display:none;
+	clear:both;
+	min-height:335px;
+	width:560px;
+	padding:20px;
+}
+
+#accountPanel form {
+	width:60%;
+	margin:100px auto;
+}
+
+#accountPanel a {
+	text-decoration:none;
+	font-weight: bold;
+	font-size: 25px;
+}
+
+#accountPanel a:hover {
+	color:#153450;
+}
+
+#postForm {
+	background:#447294;
+	text-align:left;
+	display:block;
+	width:470px;
+	margin:15px auto;
+	padding:5px;
+	height:95px;
+}
+	
+#postForm textarea {
+	resize:none;
+	float:none;
+	margin:5px 15px;
+	padding:0px;
+	width:440px;
+	clear:both;
+	height:50px;
+}
+
+#postForm input {
+	margin:0px;
+	margin-right:15px;
+}
+
+#wall li{
+	display:block;
+	background:#8FBCDB;
+	width:470px;
+	margin-bottom:15px;
+	padding:5px;
 }
