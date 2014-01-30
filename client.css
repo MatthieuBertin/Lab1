@@ -1,5 +1,6 @@
 body {
     background:#8FBCDB;
+	background-image:url('test3.jpg');
 }
 
 #content{
@@ -64,7 +65,7 @@ input[type=submit]{
 /***** PROFILE VIEW *****/
 #tabBar img {
 	float:right;
-	height:18px;
+	height:22px;
 	margin-right:15px;
 }
 
@@ -80,6 +81,7 @@ input[type=submit]{
 	color:#fff;
 	text-decoration:none;
 	font-weight:bold;
+	border-radius: 5px 5px 0px 0px;
 }
 
 #tabBar a:hover {
@@ -100,6 +102,7 @@ input[type=submit]{
 	min-height:335px;
 	width:560px;
 	padding:20px;
+	border-radius:0px 5px 5px 5px;
 }
 
 #accountPanel form {
@@ -121,8 +124,8 @@ input[type=submit]{
 	background:#447294;
 	text-align:left;
 	display:block;
-	width:470px;
-	margin:15px auto;
+	width:468px;
+	margin:auto;
 	padding:5px;
 	height:95px;
 }
@@ -148,4 +151,29 @@ input[type=submit]{
 	width:470px;
 	margin-bottom:15px;
 	padding:5px;
+	border-radius:5px;
 }
+
+#name {
+	text-align:right;
+	height:25px;
+	width:448px;
+	color:#fff;
+	padding:5px 15px;
+	background:#153450;
+	font-weight:bold;
+	font-size: 24px;
+}
+
+#info {
+	width:478px;
+	border:1px solid #153450;
+	border-radius:5px;
+	margin:auto;
+	margin-top: 25px;
+}
+
+#data {
+	text-align:left;
+}
+

@@ -43,15 +43,23 @@
 			<a id="home" href="#" class="selected">Home</a>
 			<a id="browse" href="#">Browse</a>
 			<a id="account" href="#">Account</a>
-			<img src="logo.png" alt="Twidder" />
+			<img src="logo.png" title="Socialize with other people around the world!" alt="Twidder" />
 		</div>
 		
 		<div id="homePanel" class="panel" style="display:block;">
-			<div id="info"></div>
-			<form id="postForm" action="#" method="post" >
+			<div id="info">
+				<div id="name">Matthieu Bertin</div>
+				<ul id="data">
+					<li>Gender:  Male</li>
+					<li>City, Country: Le Havre, France</li>
+					<li>Email: Matbe513@student.liu.se</li>
+				</ul>
+			<form id="postForm" onsubmit="postMessage();return false;" action="#" method="post" >
 				<textarea maxlength="150" id="msg" name="msg" required="true">Post a message on your wall (max 150 char.)</textarea>
 				<input type="submit" value="Post message"/>
 			</form>
+			</div>
+			
 			<ul id="wall">
 				<li>Un super message</li>
 				<li>lol un autre</li>

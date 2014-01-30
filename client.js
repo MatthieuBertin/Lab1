@@ -1,6 +1,5 @@
 // Bug : can't erase msg and lmsg in the same function (onchange) or need to identify the parent of this...
 
-
 displayView = function() {
 	
 	if (localStorage.getItem("token") != null) {
@@ -13,6 +12,11 @@ displayView = function() {
 		
 		// Signout
 		document.getElementById("signout").onclick = signOut;
+		
+		document.getElementById("name").onclick = dataVisibility;
+		var data = true;
+		
+		loadWall();
 	}
 	else {
 		document.getElementById("content").innerHTML = document.getElementById("welcomeview").innerHTML;
@@ -127,7 +131,42 @@ function tabHandler(tab) {
 
 function signOut() {
 	
-	serverstub.signOut(localStorage.getItem("token"));
+	serverstub.signOut(JSON.parse(localStorage.getItem("token")));
 	localStorage.removeItem("token");
 	displayView();
 };
+
+function dataVisibility() {
+	console.log("test");
+	if(data)
+		document.getElementById("data").style.display = "none";
+	else
+		document.getElementById("data").style.display = "block";
+		
+	data = !data;
+};
+
+function loadWall() {
+	var token = JSON.parse(localStorage.getItem("token"));
+	console.log(token);
+	var messages = serverstub.getUserMessagesByToken(token).data;
+	var html = "";
+	console.log(messages);
+	if (messages.length > 0)
+	for (var i = 0; i < messages.length; i++)
+		html += "<li>" + messages[i].content + "</li>";
+	else
+		html = "<li> aucun messages </li>";
+		
+	document.getElementById("wall").innerHTML = html;	
+}
+
+function postMessage() {
+
+	var token = JSON.parse(localStorage.getItem("token"));
+	var content = document.forms["postForm"]["msg"].value;
+	var toEmail = serverstub.tokenToEmail(token);
+	serverstub.postMessage(token, content, toEmail);
+	
+	loadWall();
+}
