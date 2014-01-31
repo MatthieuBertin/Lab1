@@ -120,7 +120,7 @@ input[type=submit]{
 	color:#153450;
 }
 
-#postForm {
+#postForm , #vPostForm {
 	background:#447294;
 	text-align:left;
 	display:block;
@@ -130,7 +130,7 @@ input[type=submit]{
 	height:95px;
 }
 	
-#postForm textarea {
+#postForm textarea, #vPostForm textarea {
 	resize:none;
 	float:none;
 	margin:5px 15px;
@@ -141,12 +141,12 @@ input[type=submit]{
 	border:none;
 }
 
-#postForm input {
+#postForm input, , #vPostForm input {
 	margin:0px;
 	margin-right:15px;
 }
 
-#wall li{
+#wall li, #vWall li{
 	display:block;
 	background:#8FBCDB;
 	width:460px;
@@ -161,7 +161,7 @@ input[type=submit]{
 	font-weight:bold;
 }
 
-#name {
+#name, #vName{
 	text-align:right;
 	height:25px;
 	width:448px;
@@ -172,14 +172,39 @@ input[type=submit]{
 	font-size: 24px;
 }
 
-#info {
+#info, #vInfo{
 	width:478px;
 	/*border:1px solid #153450;*/
 	border-radius:5px;
 	margin:25px auto 40px auto;
 }
 
-#data {
+#data, #vData {
 	text-align:left;
 }
 
+#vInfo {
+	display:none;
+	margin-top:100px;
+}
+
+#searchForm { 
+	display:block;
+	margin-top:30px;
+}
+	
+
+#searchForm input[type=submit]{
+	height:35px;
+	margin-top:0px;
+	margin-right:20px;
+}
+
+#searchForm  input[type=text]{
+	width: 440px;
+	float:left;
+	height:30px;
+	border:2px inset #153450;
+	margin-left:20px;
+	padding-left:10px;
+}

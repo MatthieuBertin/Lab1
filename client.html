@@ -60,7 +60,26 @@
 			<ul id="wall">
 			</ul>
 		</div>
-		<div id="browsePanel" class="panel">Browse</div>
+		
+		<div id="browsePanel" class="panel">
+			<form id="searchForm" onsubmit="searchUser();return false;" action="#" method="post" >
+				<input type="text" id="search" name="search" />
+				<input type="submit" value="Gooo!" />
+			</form>
+			
+			<div id="vInfo">
+				<div id="vName"></div>
+				<ul id="vData">
+				</ul>
+			<form id="vPostForm" onsubmit="postMessageOnView();return false;" action="#" method="post" >
+				<textarea maxlength="150" id="vMsg" name="vMsg" required="true">Post a message on the wall (max 150 char.)</textarea>
+				<input type="submit" value="Post message"/>
+			</form>
+			</div>
+			
+			<ul id="vWall">
+			</ul>
+		</div>
 		
 		<div id="accountPanel" class="panel">
 			<a id="signout" href="#">Sign out</a>

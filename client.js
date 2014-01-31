@@ -41,11 +41,7 @@ displayView = function() {
 };
 
 window.onload = function() {
-	
 	displayView();
-	
-//	document.forms["signup"].onsubmit = signUp();
-//	document.forms["login"].onsubmit = login();
 };
 
 function signUp() {
@@ -172,7 +168,7 @@ function loadWall() {
 		html = "<li> No messages </li>";
 		
 	document.getElementById("wall").innerHTML = html;	
-}
+};
 
 function loadData() {
 	var token = JSON.parse(localStorage.getItem("token"));
@@ -183,7 +179,7 @@ function loadData() {
 	var content = '<li>Gender: ' + data.gender + '</li><li>City, Country: ' + data.city + ', ' + data.country + '</li><li>Email: ' + data.email + '</li>';
 	console.log(content);
 	document.getElementById("data").innerHTML = content;
-}
+};
 
 function postMessage() {
 	
@@ -197,4 +193,58 @@ function postMessage() {
 		loadWall();
 	} else
 		document.forms["postForm"]["msg"].style.border = "2px inset red";
-}
+};
+
+function postMessageOnView() {
+	
+	var content = document.forms["vPostForm"]["vMsg"].value.trim();
+	
+	if(content && content != "Post a message on the wall (max 150 char.)") {
+		var token = JSON.parse(localStorage.getItem("token"));
+		var toEmail = serverstub.tokenToEmail(viewToken);
+		serverstub.postMessage(token, content, toEmail);
+		document.forms["vPostForm"]["vMsg"].value = "Post a message on the wall (max 150 char.)";
+		loadViewedWall();
+	} else
+		document.forms["vPostForm"]["vMsg"].style.border = "2px inset red";
+};
+
+function searchUser() {
+
+	var search = document.forms["searchForm"]["search"].value.trim();
+	var token = JSON.parse(localStorage.getItem("token"));
+
+	var user = serverstub.getUserDataByEmail(token, search);
+
+	if(user.success) {
+		
+		user = user.data;
+
+		document.getElementById("vName").innerHTML = user.firstname + ' ' + user.familyname;
+		var content = '<li>Gender: ' + user.gender + '</li><li>City, Country: ' + user.city + ', ' + user.country + '</li><li>Email: ' + user.email + '</li>';
+		document.getElementById("vData").innerHTML = content;
+		
+		document.getElementById("vInfo").style.display = "block";
+	
+		var messages = serverstub.getUserMessagesByEmail(token, search);
+
+		if(messages.success) {
+			messages = messages.data;
+			var html = "";
+			
+			if (messages.length > 0)
+			for (var i = 0; i < messages.length; i++)
+				html += '<li><span class="author">' + messages[i].writer+ ' </span>' + messages[i].content + '</li>';
+			else
+				html = "<li> No messages </li>";
+				
+			document.getElementById("vWall").innerHTML = html;	
+			document.getElementById("vWall").style.display = "block";
+		}
+	}
+	else {
+		document.getElementById("vWall").style.display = "none";
+		document.getElementById("vInfo").style.display = "none";
+	}
+};
+	 
