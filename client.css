@@ -138,6 +138,7 @@ input[type=submit]{
 	width:440px;
 	clear:both;
 	height:50px;
+	border:none;
 }
 
 #postForm input {
@@ -148,10 +149,16 @@ input[type=submit]{
 #wall li{
 	display:block;
 	background:#8FBCDB;
-	width:470px;
+	width:460px;
 	margin-bottom:15px;
 	padding:5px;
+	padding-left:15px;
 	border-radius:5px;
+	text-align:left;
+}
+
+.author {
+	font-weight:bold;
 }
 
 #name {
@@ -167,10 +174,9 @@ input[type=submit]{
 
 #info {
 	width:478px;
-	border:1px solid #153450;
+	/*border:1px solid #153450;*/
 	border-radius:5px;
-	margin:auto;
-	margin-top: 25px;
+	margin:25px auto 40px auto;
 }
 
 #data {

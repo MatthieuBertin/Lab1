@@ -13,9 +13,23 @@ displayView = function() {
 		// Signout
 		document.getElementById("signout").onclick = signOut;
 		
+		// Home
 		document.getElementById("name").onclick = dataVisibility;
+		document.forms["postForm"]["msg"].onfocus = function() { 
+			console.log("ONFOCUS "+document.forms["postForm"]["msg"].value);
+			if(document.forms["postForm"]["msg"].value == "Post a message on your wall (max 150 char.)")
+				document.forms["postForm"]["msg"].value = "";
+			document.forms["postForm"]["msg"].style.border = "";
+		}
+		document.forms["postForm"]["msg"].onblur = function() { 
+		console.log("ONBLUR "+document.forms["postForm"]["msg"].value);
+			if(!document.forms["postForm"]["msg"].value)
+				document.forms["postForm"]["msg"].value = "Post a message on your wall (max 150 char.)";
+		}
+		
 		var data = true;
 		
+		loadData();
 		loadWall();
 	}
 	else {
@@ -148,25 +162,39 @@ function dataVisibility() {
 
 function loadWall() {
 	var token = JSON.parse(localStorage.getItem("token"));
-	console.log(token);
 	var messages = serverstub.getUserMessagesByToken(token).data;
 	var html = "";
-	console.log(messages);
+	
 	if (messages.length > 0)
 	for (var i = 0; i < messages.length; i++)
-		html += "<li>" + messages[i].content + "</li>";
+		html += '<li><span class="author">' + messages[i].writer+ ' </span>' + messages[i].content + '</li>';
 	else
-		html = "<li> aucun messages </li>";
+		html = "<li> No messages </li>";
 		
 	document.getElementById("wall").innerHTML = html;	
 }
 
-function postMessage() {
-
+function loadData() {
 	var token = JSON.parse(localStorage.getItem("token"));
-	var content = document.forms["postForm"]["msg"].value;
-	var toEmail = serverstub.tokenToEmail(token);
-	serverstub.postMessage(token, content, toEmail);
+	var data = serverstub.getUserDataByToken(token).data;
+	console.log(data);
+	document.getElementById("name").innerHTML = data.firstname + ' ' + data.familyname;
 	
-	loadWall();
+	var content = '<li>Gender: ' + data.gender + '</li><li>City, Country: ' + data.city + ', ' + data.country + '</li><li>Email: ' + data.email + '</li>';
+	console.log(content);
+	document.getElementById("data").innerHTML = content;
+}
+
+function postMessage() {
+	
+	var content = document.forms["postForm"]["msg"].value.trim();
+	
+	if(content && content != "Post a message on your wall (max 150 char.)") {
+		var token = JSON.parse(localStorage.getItem("token"));
+		var toEmail = serverstub.tokenToEmail(token);
+		serverstub.postMessage(token, content, toEmail);
+		document.forms["postForm"]["msg"].value = "Post a message on your wall (max 150 char.)";
+		loadWall();
+	} else
+		document.forms["postForm"]["msg"].style.border = "2px inset red";
 }
