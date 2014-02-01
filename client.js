@@ -1,10 +1,10 @@
 // Bug : can't erase msg and lmsg in the same function (onchange) or need to identify the parent of this...
 
-displayView = function() {
-	
-	if (localStorage.getItem("token") != null) {
+displayView = function () {
+
+	if (localStorage.getItem("token") !== null) {
 		document.getElementById("content").innerHTML = document.getElementById("profileview").innerHTML;
-		
+
 		// Tab handling
 		document.getElementById("home").onclick = tabHandlerHome;
 		document.getElementById("browse").onclick = tabHandlerBrowse;
@@ -36,7 +36,7 @@ displayView = function() {
 		document.getElementById("content").innerHTML = document.getElementById("welcomeview").innerHTML;
 		var inputs = document.getElementsByTagName("input");
 		for (var i = 0; i < inputs.length; i++)
-			inputs.item(i).onchange = function() { document.getElementById("msg").innerHTML = ""; this.style.border = "2px inset"; };	
+			inputs.item(i).onkeypress = function() { document.getElementById("msg").innerHTML = ""; this.style.border = "2px inset"; };	
 	}
 };
 
@@ -60,8 +60,10 @@ function signUp() {
 	var pwd = document.forms["signup"]["pwd"];
 	var repwd = document.forms["signup"]["repwd"];
 	
-	if(pwd.value != repwd.value) {
+	if(pwd.value !== repwd.value) {
 		pwd.value = repwd.value = "";
+		pwd.style.border = "2px inset red";
+		repwd.style.border = "2px inset red";
 		err = true;
 	}
 	
@@ -83,15 +85,17 @@ function signUp() {
 		
 			document.forms["signup"]["email"].style.border = "2px inset red";
 			document.getElementById("msg").style.color = "red";
+			document.getElementById("msg").style.fontSize = "10px";
 			document.getElementById("msg").innerHTML = result.message;
 			
 		} else {
 		
 			document.getElementById("msg").style.color = "green";
+			document.getElementById("msg").style.fontSize = "10px";
 			document.getElementById("msg").innerHTML = result.message;
 			
 			var fields = document.forms["signup"].getElementsByTagName("input");
-			for (var i = 0; i < fields.length; i++) 
+			for (var i = 0; i < fields.length-1; i++)
 				fields.item(i).value = "";
 		}
 	}
@@ -102,7 +106,7 @@ function login() {
 	var email = document.forms["login"]["lemail"];
 	var password = document.forms["login"]["lpwd"];
 	
-	if (!email.value) email.style.border = "2px inset red";
+	if (!email.value) email.style.border = "2px inset red ";
 	if (!password.value) password.style.border = "2px inset red";
 	
 	if (email.value && password.value) {
@@ -113,6 +117,7 @@ function login() {
 			email.style.border = "2px inset red";
 			password.style.border = "2px inset red";
 			document.getElementById("lmsg").style.color = "red";
+			document.getElementById("lmsg").style.fontSize = "10px";
 			document.getElementById("lmsg").innerHTML = result.message;
 		} else {
 			localStorage.setItem("token", JSON.stringify(result.data));
@@ -185,7 +190,7 @@ function postMessage() {
 	
 	var content = document.forms["postForm"]["msg"].value.trim();
 	
-	if(content && content != "Post a message on your wall (max 150 char.)") {
+	if(content && content !== "Post a message on your wall (max 150 char.)") {
 		var token = JSON.parse(localStorage.getItem("token"));
 		var toEmail = serverstub.tokenToEmail(token);
 		serverstub.postMessage(token, content, toEmail);
@@ -199,7 +204,7 @@ function postMessageOnView() {
 	
 	var content = document.forms["vPostForm"]["vMsg"].value.trim();
 	
-	if(content && content != "Post a message on the wall (max 150 char.)") {
+	if(content && content !== "Post a message on the wall (max 150 char.)") {
 		var token = JSON.parse(localStorage.getItem("token"));
 		var toEmail = serverstub.tokenToEmail(viewToken);
 		serverstub.postMessage(token, content, toEmail);
@@ -247,4 +252,3 @@ function searchUser() {
 		document.getElementById("vInfo").style.display = "none";
 	}
 };
-	 

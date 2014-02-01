@@ -48,6 +48,7 @@ label {
     float:left;
     padding:3px;
     clear:left;
+    font-size:13px;
 }
 
 input, select{
@@ -55,6 +56,8 @@ input, select{
     float:right;
     width:140px;
     clear:right;
+    border-style:inset;
+    border-radius:5px;
 }
 
 input[type=submit]{
@@ -141,7 +144,7 @@ input[type=submit]{
 	border:none;
 }
 
-#postForm input, , #vPostForm input {
+#postForm input, #vPostForm input {
 	margin:0px;
 	margin-right:15px;
 }
