@@ -46,20 +46,7 @@
 			<img src="logo.png" title="Socialize with other people around the world!" alt="Twidder" />
 		</div>
 		
-		<div id="homePanel" class="panel" style="display:block;">
-			<div id="info">
-				<div id="name"></div>
-				<ul id="data">
-				</ul>
-			<form id="postForm" onsubmit="postMessage();return false;" action="#" method="post" >
-				<textarea maxlength="150" id="msg" name="msg" required="true">Post a message on your wall (max 150 char.)</textarea>
-				<input type="submit" value="Post message"/>
-			</form>
-			</div>
-			
-			<ul id="wall">
-			</ul>
-		</div>
+		<div id="homePanel" class="panel" style="display:block;"></div>
 		
 		<div id="browsePanel" class="panel">
 			<form id="searchForm" onsubmit="searchUser();return false;" action="#" method="post" >
@@ -67,18 +54,8 @@
 				<input type="submit" value="Gooo!" />
 			</form>
 			
-			<div id="vInfo">
-				<div id="vName"></div>
-				<ul id="vData">
-				</ul>
-			<form id="vPostForm" onsubmit="postMessageOnView();return false;" action="#" method="post" >
-				<textarea maxlength="150" id="vMsg" name="vMsg" required="true">Post a message on the wall (max 150 char.)</textarea>
-				<input type="submit" value="Post message"/>
-			</form>
-			</div>
+			<div id="userWallView"> </div>
 			
-			<ul id="vWall">
-			</ul>
 		</div>
 		
 		<div id="accountPanel" class="panel">
@@ -93,6 +70,21 @@
 		
 		
     </script>
+	
+	<script id="wallView" type="text/view">
+		<div id="userInfo">
+			<div id="userName"></div>
+			<ul id="userData"></ul>
+			
+			<form id="postForm" onsubmit="postMessage();return false;" action="#" method="post" >
+				<textarea maxlength="150" id="msg" name="msg" required="true">Your message here (max 150 char.)</textarea>
+				<input type="submit" value="Post message"/>
+			</form>
+		</div>
+			
+		<ul id="userWall"></ul>
+	</script>
+	
   </head>
 
 

@@ -66,6 +66,19 @@ input[type=submit]{
 }
 
 /***** PROFILE VIEW *****/
+
+.panel {
+	text-align:center;
+	background: #fff;
+	display:none;
+	clear:both;
+	min-height:335px;
+	width:560px;
+	padding:20px;
+	border-radius:0px 5px 5px 5px;
+}
+
+/* Tab */
 #tabBar img {
 	float:right;
 	height:22px;
@@ -97,17 +110,8 @@ input[type=submit]{
 	color:#000;
 }
 
-.panel {
-	text-align:center;
-	background: #fff;
-	display:none;
-	clear:both;
-	min-height:335px;
-	width:560px;
-	padding:20px;
-	border-radius:0px 5px 5px 5px;
-}
 
+/* Account Panel */
 #accountPanel form {
 	width:60%;
 	margin:100px auto;
@@ -123,7 +127,8 @@ input[type=submit]{
 	color:#153450;
 }
 
-#postForm , #vPostForm {
+/***** WALL VIEW *****/
+#postForm  {
 	background:#447294;
 	text-align:left;
 	display:block;
@@ -133,7 +138,7 @@ input[type=submit]{
 	height:95px;
 }
 	
-#postForm textarea, #vPostForm textarea {
+#postForm textarea{
 	resize:none;
 	float:none;
 	margin:5px 15px;
@@ -144,12 +149,12 @@ input[type=submit]{
 	border:none;
 }
 
-#postForm input, #vPostForm input {
+#postForm input {
 	margin:0px;
 	margin-right:15px;
 }
 
-#wall li, #vWall li{
+#userWall li{
 	display:block;
 	background:#8FBCDB;
 	width:460px;
@@ -164,7 +169,7 @@ input[type=submit]{
 	font-weight:bold;
 }
 
-#name, #vName{
+#userName {
 	text-align:right;
 	height:25px;
 	width:448px;
@@ -175,28 +180,24 @@ input[type=submit]{
 	font-size: 24px;
 }
 
-#info, #vInfo{
+#userInfo {
 	width:478px;
 	/*border:1px solid #153450;*/
 	border-radius:5px;
 	margin:25px auto 40px auto;
 }
 
-#data, #vData {
+#userData {
 	text-align:left;
 }
 
-#vInfo {
-	display:none;
-	margin-top:100px;
-}
-
+/* Browse Panel */
 #searchForm { 
 	display:block;
 	margin-top:30px;
+	margin-bottom:100px;
 }
 	
-
 #searchForm input[type=submit]{
 	height:35px;
 	margin-top:0px;

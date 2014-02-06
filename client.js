@@ -1,36 +1,16 @@
 // Bug : can't erase msg and lmsg in the same function (onchange) or need to identify the parent of this...
+// null js
+// !==
 
+var token = null;
+var userMail = null;
+var dataVisible = true;
+		
 displayView = function () {
 
-	if (localStorage.getItem("token") !== null) {
-		document.getElementById("content").innerHTML = document.getElementById("profileview").innerHTML;
-
-		// Tab handling
-		document.getElementById("home").onclick = tabHandlerHome;
-		document.getElementById("browse").onclick = tabHandlerBrowse;
-		document.getElementById("account").onclick = tabHandlerAccount;
-		
-		// Signout
-		document.getElementById("signout").onclick = signOut;
-		
-		// Home
-		document.getElementById("name").onclick = dataVisibility;
-		document.forms["postForm"]["msg"].onfocus = function() { 
-			console.log("ONFOCUS "+document.forms["postForm"]["msg"].value);
-			if(document.forms["postForm"]["msg"].value == "Post a message on your wall (max 150 char.)")
-				document.forms["postForm"]["msg"].value = "";
-			document.forms["postForm"]["msg"].style.border = "";
-		}
-		document.forms["postForm"]["msg"].onblur = function() { 
-		console.log("ONBLUR "+document.forms["postForm"]["msg"].value);
-			if(!document.forms["postForm"]["msg"].value)
-				document.forms["postForm"]["msg"].value = "Post a message on your wall (max 150 char.)";
-		}
-		
-		var data = true;
-		
-		loadData();
-		loadWall();
+	token = JSON.parse(localStorage.getItem("token"));
+	if (token != null) {
+		profileView();
 	}
 	else {
 		document.getElementById("content").innerHTML = document.getElementById("welcomeview").innerHTML;
@@ -44,6 +24,7 @@ window.onload = function() {
 	displayView();
 };
 
+// ##### WELCOME VIEW #####
 function signUp() {
 
 	var err = false;
@@ -126,22 +107,55 @@ function login() {
 	}
 };
 
-function tabHandlerHome() { tabHandler("home"); };
-function tabHandlerBrowse() { tabHandler("browse"); };
-function tabHandlerAccount() { tabHandler("account"); };
+// ##### PROFILE VIEW #####
+function profileView() {
+		
+		document.getElementById("content").innerHTML = document.getElementById("profileview").innerHTML;
+	
+		// Tab handling
+		document.getElementById("home").onclick = selectHome;
+		document.getElementById("browse").onclick = selectBrowse;
+		document.getElementById("account").onclick = selectAccount;
+		
+		// Signout
+		document.getElementById("signout").onclick = signOut;
+		
+		selectHome();
+		
+};
 
-function tabHandler(tab) { 
-			console.log("tabHandler : " + tab);
-			var buttons = document.getElementById("tabBar").getElementsByTagName("a");
-			for(var i = 0; i < buttons.length; i++)
-				buttons.item(i).className = "";
+/* Tab Selector */
+function selectHome() { 
+
+	document.getElementById("userWallView").innerHTML = "";
+	document.getElementById("homePanel").innerHTML = document.getElementById("wallView").innerHTML;
+	
+	select("home");
+	userMail =  null;
+	loadWallView();
+};
+
+function selectBrowse() { 
+	document.getElementById("userWallView").style.display="none";
+	document.getElementById("homePanel").innerHTML = "";
+	document.getElementById("userWallView").innerHTML = document.getElementById("wallView").innerHTML;
+	select("browse"); 
+};
+
+function selectAccount() { select("account"); };
+
+function select(tab) { 
+	
+	var buttons = document.getElementById("tabBar").getElementsByTagName("a");
+	for(var i = 0; i < buttons.length; i++)
+		buttons.item(i).className = "";
 			
-			document.getElementById("homePanel").style.display = "none";
-			document.getElementById("browsePanel").style.display = "none";
-			document.getElementById("accountPanel").style.display = "none";
-			
-			document.getElementById(tab).className="selected";
-			document.getElementById(tab + "Panel").style.display = "block";
+	document.getElementById("homePanel").style.display = "none";
+	document.getElementById("browsePanel").style.display = "none";
+	document.getElementById("accountPanel").style.display = "none";
+	
+	document.getElementById(tab).className = "selected";
+	document.getElementById(tab + "Panel").style.display = "block";
 };
 
 function signOut() {
@@ -152,103 +166,72 @@ function signOut() {
 };
 
 function dataVisibility() {
-	console.log("test");
-	if(data)
-		document.getElementById("data").style.display = "none";
-	else
-		document.getElementById("data").style.display = "block";
-		
-	data = !data;
+	document.getElementById("userData").style.display = (dataVisible) ? "block" : "none";
+	dataVisible = !dataVisible;
 };
 
-function loadWall() {
-	var token = JSON.parse(localStorage.getItem("token"));
-	var messages = serverstub.getUserMessagesByToken(token).data;
+function loadWallView() {
+
+	document.getElementById("userName").onclick = dataVisibility;
+		
+	postFormDefautMsg = "Your message here (max 150 char.)";
+	document.forms["postForm"]["msg"].onfocus = function() { 
+	if(document.forms["postForm"]["msg"].value == postFormDefautMsg)
+		document.forms["postForm"]["msg"].value = "";
+		document.forms["postForm"]["msg"].style.border = "";
+	}
+	document.forms["postForm"]["msg"].onblur = function() {
+		if(!document.forms["postForm"]["msg"].value)
+			document.forms["postForm"]["msg"].value = postFormDefautMsg;
+	}
+	document.forms["postForm"]["msg"].value = postFormDefautMsg;
+
+	/* null */
+	/***** Load Wall *****/
+	var messages = (userMail != null) ? serverstub.getUserMessagesByEmail(token, userMail).data : serverstub.getUserMessagesByToken(token).data;
+	
 	var html = "";
-	
 	if (messages.length > 0)
-	for (var i = 0; i < messages.length; i++)
-		html += '<li><span class="author">' + messages[i].writer+ ' </span>' + messages[i].content + '</li>';
+		for (var i = 0; i < messages.length; i++)
+			html += '<li><span class="author">' + messages[i].writer+ ' </span>' + messages[i].content + '</li>';
 	else
-		html = "<li> No messages </li>";
-		
-	document.getElementById("wall").innerHTML = html;	
-};
-
-function loadData() {
-	var token = JSON.parse(localStorage.getItem("token"));
-	var data = serverstub.getUserDataByToken(token).data;
-	console.log(data);
-	document.getElementById("name").innerHTML = data.firstname + ' ' + data.familyname;
+		html = "<li> No messages </li>";	
+	document.getElementById("userWall").innerHTML = html;	
 	
+	/***** Load Data *****/
+	var data = (userMail != null) ? serverstub.getUserDataByEmail(token, userMail).data : serverstub.getUserDataByToken(token).data;
+	
+	document.getElementById("userName").innerHTML = data.firstname + ' ' + data.familyname;
 	var content = '<li>Gender: ' + data.gender + '</li><li>City, Country: ' + data.city + ', ' + data.country + '</li><li>Email: ' + data.email + '</li>';
-	console.log(content);
-	document.getElementById("data").innerHTML = content;
+	document.getElementById("userData").innerHTML = content;
 };
 
 function postMessage() {
 	
 	var content = document.forms["postForm"]["msg"].value.trim();
 	
-	if(content && content !== "Post a message on your wall (max 150 char.)") {
-		var token = JSON.parse(localStorage.getItem("token"));
-		var toEmail = serverstub.tokenToEmail(token);
+	if(content && content != postFormDefautMsg) {
+		var toEmail = (userMail != null) ? userMail : serverstub.tokenToEmail(token);
 		serverstub.postMessage(token, content, toEmail);
-		document.forms["postForm"]["msg"].value = "Post a message on your wall (max 150 char.)";
-		loadWall();
+		document.forms["postForm"]["msg"].value = postFormDefautMsg;
+		loadWallView();
 	} else
 		document.forms["postForm"]["msg"].style.border = "2px inset red";
-};
-
-function postMessageOnView() {
-	
-	var content = document.forms["vPostForm"]["vMsg"].value.trim();
-	
-	if(content && content !== "Post a message on the wall (max 150 char.)") {
-		var token = JSON.parse(localStorage.getItem("token"));
-		var toEmail = serverstub.tokenToEmail(viewToken);
-		serverstub.postMessage(token, content, toEmail);
-		document.forms["vPostForm"]["vMsg"].value = "Post a message on the wall (max 150 char.)";
-		loadViewedWall();
-	} else
-		document.forms["vPostForm"]["vMsg"].style.border = "2px inset red";
 };
 
 function searchUser() {
 
 	var search = document.forms["searchForm"]["search"].value.trim();
-	var token = JSON.parse(localStorage.getItem("token"));
-
-	var user = serverstub.getUserDataByEmail(token, search);
-
-	if(user.success) {
-		
-		user = user.data;
-
-		document.getElementById("vName").innerHTML = user.firstname + ' ' + user.familyname;
-		var content = '<li>Gender: ' + user.gender + '</li><li>City, Country: ' + user.city + ', ' + user.country + '</li><li>Email: ' + user.email + '</li>';
-		document.getElementById("vData").innerHTML = content;
-		
-		document.getElementById("vInfo").style.display = "block";
+	var searchResult = serverstub.getUserDataByEmail(token, search);
+	console.log(searchResult);
 	
-		var messages = serverstub.getUserMessagesByEmail(token, search);
-
-		if(messages.success) {
-			messages = messages.data;
-			var html = "";
-			
-			if (messages.length > 0)
-			for (var i = 0; i < messages.length; i++)
-				html += '<li><span class="author">' + messages[i].writer+ ' </span>' + messages[i].content + '</li>';
-			else
-				html = "<li> No messages </li>";
-				
-			document.getElementById("vWall").innerHTML = html;	
-			document.getElementById("vWall").style.display = "block";
-		}
-	}
-	else {
-		document.getElementById("vWall").style.display = "none";
-		document.getElementById("vInfo").style.display = "none";
+	if(searchResult.success) {
+		userMail = searchResult.data.email;
+		document.getElementById("userWallView").style.display = "block";
+		dataVisible = true;
+		dataVisibility();
+		loadWallView();
+	} else {
+		document.getElementById("userWallView").style.display =  "none";
 	}
 };
