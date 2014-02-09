@@ -1,6 +1,6 @@
 body {
     background:#8FBCDB;
-	background-image:url('test3.jpg');
+	background-image:url('background.jpg');
 }
 
 #content{
@@ -47,6 +47,7 @@ label {
     margin-left:5px;
     float:left;
     padding:3px;
+	padding-top:7px;
     clear:left;
     font-size:13px;
 }
@@ -212,3 +213,5 @@ input[type=submit]{
 	margin-left:20px;
 	padding-left:10px;
 }
+
+$

@@ -60,10 +60,11 @@
 		
 		<div id="accountPanel" class="panel">
 			<a id="signout" href="#">Sign out</a>
-			<form id="pwdForm" action="#" method="post" >
+			<form id="pwdForm" onsubmit="changePwd();return false;" action="#" method="post" >
 				<label for="oldPwd">Old password:</label><input type="password" id="oldPwd" name="oldPwd" />
 				<label for="newPwd">New password:</label><input type="password" id="newPwd" name="newPwd"/>
 				<label for="reNewPwd">Confirm new password:</label><input type="password" id="reNewPwd" name="reNewPwd"/>
+				<label id="result"></label>
 				<input type="submit" value="Change password" />
 			</form>
 		</div>

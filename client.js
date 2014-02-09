@@ -165,6 +165,30 @@ function signOut() {
 	displayView();
 };
 
+function changePwd() {
+	
+	console.log("switch");
+	
+	var oldPwd = document.forms["pwdForm"]["oldPwd"].value;
+	var newPwd = document.forms["pwdForm"]["newPwd"].value;
+	var reNewPwd = document.forms["pwdForm"]["reNewPwd"].value;
+	
+	var result = document.getElementById("result");
+	
+	result.style.color = "red";
+	if (!oldPwd || !newPwd || !reNewPwd)
+		result.innerHTML = "Empty fields";
+	else if (newPwd != reNewPwd) {
+		result.innerHTML = "Differents passwords";
+		newPwd = reNewPwd = '';
+	} else {
+		result.innerHTML = "success";
+		result.style.color = "green";
+	}
+	
+	
+}	
+
 function dataVisibility() {
 	document.getElementById("userData").style.display = (dataVisible) ? "block" : "none";
 	dataVisible = !dataVisible;
