@@ -37,7 +37,7 @@ def signout_user(token):
 
 def user_signedin(token):
     cur = get_db().cursor()
-    cur.execute('SELECT email FROM signed_users WHERE token=?', (token,))
+    cur.execute('SELECT user FROM signed_users WHERE token=?', (token,))
     return cur.fetchone()
 
 def get_password(email):
