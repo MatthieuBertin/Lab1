@@ -1,4 +1,4 @@
-CREATE TABLE users(
+CREATE TABLE users (
     email VARCHAR(40),
     password VARCHAR(512),
     firstname VARCHAR(30),
@@ -9,15 +9,15 @@ CREATE TABLE users(
     PRIMARY KEY(email)
 );
 
-CREATE TABLE signed_users {
-    token INT,
+CREATE TABLE signed_users (
+    token VARCHAR(40),
     user VARCHAR(40),
     PRIMARY KEY(token)
-};
+);
 
-CREATE TABLE messages {
+CREATE TABLE messages (
     id INT AUTO INCREMENT,
     sender VARCHAR(40),
     receiver VARCHAR(40),
     content VARCHAR(150)
-};
+);

@@ -2,6 +2,7 @@ from flask import Flask
 import hashlib
 import database_helper
 import json
+import random
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -14,12 +15,28 @@ def sign_in(email, password):
     if result is None:
         return json.dump({"success": False, "message": "Wrong username or password."})
 
-    database_helper.signin_user(123, email)
+    rand = random.random()
+    rand.seed()
+    letters = "abcdefghiklmnopqrstuvwwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+    token = ""
+    for i in range(40):
+        token[i] = letters[rand.randint(0, len(letters)-1)]
+
+    database_helper.signin_user(token, email)
+    return json.dump({"success": True, "message": "Successfully signed in.", "data": token})
 
 @app.route('/sign_up/<email>/<password>/<firstname>/<familyname>/<gender>/<city>/<country>')
 def sign_up(email, password, firstname, familyname, gender, city, country):
+
+    if(database_helper.user_exist(email)):
+        return json.dump({"success": False, "message": "User already exists."})
+
+    if(not email or not password or not firstname or not familyname or not gender or not city or not country):
+        return json.dump({"success": False, "message": "Formdata not complete."})
+
     pwd = hashlib.sha512()
     pwd.update(password)
+    database_helper.add_user(email, pwd.digest(), firstname, familyname, gender, city, country)
 
     pass
 

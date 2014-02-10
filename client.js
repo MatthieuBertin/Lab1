@@ -232,29 +232,28 @@ function loadWallView() {
   /* null */
   /***** Load Wall *****/
   var messages = (userMail !== null) ? serverstub.getUserMessagesByEmail(token, userMail).data : serverstub.getUserMessagesByToken(token).data;
-  
+  console.log(messages);
   var html = "";
+  console.log(messages.length);
   if (messages.length > 0) {
-    for (var i = 0; i < messages.length; i++) {
-      
+    for (var i = 0; i < messages.length; i++) {  
       //Check for words longer than 40characters and split them
-      if (messages[i].content.length>=40) {
-	var parts = messages[i].content.split(' ');
-	html += '<li><span class="author">' + messages[i].writer+ ' </span>';
-	for (var a = 0; a < parts.length; a++)
-	{
-	  if (parts[a].length >=40) {
-	    var splits = parts[a].match(/.{1,40}/g);
-	    for (var b = 0; b < splits.length; b++)
-	      html += splits[b] + ' ';
-	  }
-	  else 
-	    html += parts[a]+ ' ';
-	}
-	html += '</li>';
-      }
-      else
-	html += '<li><span class="author">' + messages[i].writer+ ' </span>' + messages[i].content + '</li>';
+		if (messages[i].content.length >= 40) {
+			var parts = messages[i].content.split(' ');
+			html += '<li><span class="author">' + messages[i].writer+ ' </span>';
+			for (var a = 0; a < parts.length; a++) {
+				if (parts[a].length >=40) {
+					var splits = parts[a].match(/.{1,40}/g);
+					for (var b = 0; b < splits.length; b++)
+						html += splits[b] + ' ';
+				}		
+				else 
+					html += parts[a]+ ' ';
+			}
+			html += '</li>';
+		}
+		else
+			html += '<li><span class="author">' + messages[i].writer+ ' </span>' + messages[i].content + '</li>';
     }
   }
   else

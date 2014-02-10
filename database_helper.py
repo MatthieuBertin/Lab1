@@ -19,6 +19,11 @@ def check_user(email, password):
     cur.execute('SELECT email FROM users WHERE email=? AND password=?', (email, password))
     return cur.fetchone()
 
+def user_exist(email):
+    cur = get_db().cursor()
+    cur.execute('SELECT email FROM users WHERE email=?', email)
+    return cur.fetchone()
+
 def signin_user(token, email):
     get_db().execute('INSERT INTO signed_user VALUES(?,?)', (token, email))
 
