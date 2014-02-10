@@ -1,0 +1,23 @@
+CREATE TABLE users(
+    email VARCHAR(40),
+    password VARCHAR(512),
+    firstname VARCHAR(30),
+    familyname VARCHAR(30),
+    gender VARCHAR(6),
+    city VARCHAR(30),
+    country VARCHAR(30),
+    PRIMARY KEY(email)
+);
+
+CREATE TABLE signed_users {
+    token INT,
+    user VARCHAR(40),
+    PRIMARY KEY(token)
+};
+
+CREATE TABLE messages {
+    id INT AUTO INCREMENT,
+    sender VARCHAR(40),
+    receiver VARCHAR(40),
+    content VARCHAR(150)
+};
