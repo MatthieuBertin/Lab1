@@ -10,7 +10,6 @@ app.config['DEBUG'] = True
 @app.route('/sign_in/<email>/<password>')
 def sign_in(email, password):
     pwd = hashlib.sha512()
-    pwd.update(password)
     if database_helper.check_user(email, pwd.digest()) is None:
         return json.dump({"success": False, "message": "Wrong username or password."})
 
@@ -24,6 +23,7 @@ def sign_in(email, password):
     database_helper.signin_user(token, email)
     return json.dump({"success": True, "message": "Successfully signed in.", "data": token})
 
+
 @app.route('/sign_up/<email>/<password>/<firstname>/<familyname>/<gender>/<city>/<country>')
 def sign_up(email, password, firstname, familyname, gender, city, country):
 
@@ -33,11 +33,10 @@ def sign_up(email, password, firstname, familyname, gender, city, country):
     if(not email or not password or not firstname or not familyname or not gender or not city or not country):
         return json.dump({"success": False, "message": "Formdata not complete."})
 
-    pwd = hashlib.sha512()
-    pwd.update(password)
-    database_helper.add_user(email, pwd.digest(), firstname, familyname, gender, city, country)
+    database_helper.add_user(email, hashlib.sha512(password).digest(), firstname, familyname, gender, city, country)
 
     return json.dump({"success": True, "message": "Successfully created a new user."})
+
 
 @app.route('/sign_out/<token>')
 def sign_out(token):
@@ -50,27 +49,65 @@ def sign_out(token):
 
 @app.route('/change_password/<token>/<old_password>/<new_password>')
 def change_password(token, old_password, new_password):
-    pass
 
-@app.route('/get_user_data_by_token/<token>')
-def get_user_data_by_token(token):
-    pass
+    user = database_helper.user_signedin(token)
+    if user is None:
+        return json.dump({"success": False, "message": "You are not logged in."})
 
-@app.route('/get_user_data_by_email/<token>/<email>')
-def get_user_data_by_email(token, email):
-    pass
+    if database_helper.get_password(user) != hashlib.sha512(old_password).digest():
+        return json.dump({"success": False, "message": "Wrong password."})
+
+    database_helper.update_password(user, hashlib.sha512(new_password).digest())
+    return json.dump({"success": True, "message": "Password changed."})
+
 
 @app.route('/get_user_messages_by_token/<token>')
 def get_user_messages_by_token(token):
-    pass
+    return get_user_messages_by_email(token, database_helper.user_signedin(token))
+
 
 @app.route('/get_user_messages_by_email/<token>/<email>')
 def get_user_messages_by_email(token, email):
-    pass
+    if email is None:
+        return json.dump({"success": False, "message": "You are not signed in."})
+
+    data = database_helper.get_messages(email)
+    if data is None:
+        return json.dump({"success": False, "message": "No such user."})
+
+    return json.dump({"success": True, "message": "User messages retrieved..", "data": data})
+
+
+@app.route('/get_user_data_by_token/<token>')
+def get_user_data_by_token(token):
+    return get_user_data_by_email(token, database_helper.user_signedin(token))
+
+
+@app.route('/get_user_data_by_email/<token>/<email>')
+def get_user_data_by_email(token, email):
+    if email is None:
+        return json.dump({"success": False, "message": "You are not signed in."})
+
+    data = database_helper.get_user(email)
+    if data is None:
+        return json.dump({"success": False, "message": "No such user."})
+
+    return json.dump({"success": True, "message": "User data retrieved..", "data": data})
+
 
 @app.route('/post_message/<token>/<message>/<email>')
 def post_message(token, message, email):
-    pass
+
+    user = database_helper.user_signedin(token)
+    if user is None:
+        return json.dump({"success": False, "message": "You are not signed in."})
+
+    if database_helper.user_exist(email) is None:
+        return json.dump({"success": False, "message": "No such user."})
+
+    database_helper.post_message(user, email, message)
+    return json.dump({"success": True, "message": "Message posted"})
+
 
 @app.teardown_appcontext
 def teardown_app(exception):

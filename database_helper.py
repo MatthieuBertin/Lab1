@@ -14,6 +14,11 @@ def close_db():
 def add_user(email, password, firstname, familyname, gender, city, country):
     get_db().execute('INSERT INTO users VALUES(?,?,?,?,?,?,?)', (email, password, firstname, familyname, gender, city, country))
 
+def get_user(email):
+    cur = get_db().cursor()
+    cur.execute('SELECT email, firstname, familyname, gender, city, country FROM users WHERE email=?', email)
+    return cur.fetchone()
+
 def check_user(email, password):
     cur = get_db().cursor()
     cur.execute('SELECT email FROM users WHERE email=? AND password=?', (email, password))
@@ -32,9 +37,21 @@ def signout_user(token):
 
 def user_signedin(token):
     cur = get_db().cursor()
-    cur.execute('SELECT token FROM signed_user WHERE token=?', token)
+    cur.execute('SELECT email FROM signed_user WHERE token=?', token)
     return cur.fetchone()
 
-def remove_contact(firstname, familyname):
-    pass
-       #code for removing a contact
+def get_password(email):
+    cur = get_db().cursor()
+    cur.execute('SELECT password FROM users WHERE email=?', email)
+    return cur.fetchone()
+
+def update_password(email, newPwd):
+    get_db().execute('UPDATE users SET password=? WHERE email=?', (newPwd, email))
+
+def get_messages(email):
+    cur = get_db().cursor()
+    cur.execute('SELECT sender, content FROM messages WHERE receiver=?', email)
+    return cur.fetchall()
+
+def post_message(sender, receiver, content):
+    get_db().execute('INSERT INTO messages VALUES(?,?,?)', (sender, receiver, content))
