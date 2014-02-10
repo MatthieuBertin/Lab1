@@ -9,7 +9,7 @@ app.config['DEBUG'] = True
 
 @app.route('/sign_in/<email>/<password>')
 def sign_in(email, password):
-    pwd = hashlib.sha512()
+    pwd = hashlib.sha512(password.encode('utf-8'))
     if database_helper.check_user(email, pwd.digest()) is None:
         return json.dump({"success": False, "message": "Wrong username or password."})
 
@@ -33,7 +33,7 @@ def sign_up(email, password, firstname, familyname, gender, city, country):
     if(not email or not password or not firstname or not familyname or not gender or not city or not country):
         return json.dump({"success": False, "message": "Formdata not complete."})
 
-    database_helper.add_user(email, hashlib.sha512(password).digest(), firstname, familyname, gender, city, country)
+    database_helper.add_user(email, hashlib.sha512(password.encode('utf-8')).digest(), firstname, familyname, gender, city, country)
 
     return json.dump({"success": True, "message": "Successfully created a new user."})
 
@@ -54,10 +54,10 @@ def change_password(token, old_password, new_password):
     if user is None:
         return json.dump({"success": False, "message": "You are not logged in."})
 
-    if database_helper.get_password(user) != hashlib.sha512(old_password).digest():
+    if database_helper.get_password(user) != hashlib.sha512(old_password.encode('utf-8')).digest():
         return json.dump({"success": False, "message": "Wrong password."})
 
-    database_helper.update_password(user, hashlib.sha512(new_password).digest())
+    database_helper.update_password(user, hashlib.sha512(new_password.encode('utf-8')).digest())
     return json.dump({"success": True, "message": "Password changed."})
 
 
