@@ -11,8 +11,8 @@ CREATE TABLE users (
 
 CREATE TABLE signed_users (
     token VARCHAR(40),
-    user VARCHAR(40),
-    PRIMARY KEY(token)
+    email VARCHAR(40),
+    PRIMARY KEY(email)
 );
 
 CREATE TABLE messages (

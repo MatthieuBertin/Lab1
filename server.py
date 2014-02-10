@@ -3,6 +3,7 @@ import hashlib
 import database_helper
 import json
 import random
+import string
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -10,15 +11,11 @@ app.config['DEBUG'] = True
 @app.route('/sign_in/<email>/<password>')
 def sign_in(email, password):
     pwd = hashlib.sha512(password.encode('utf-8'))
-    if database_helper.check_user(email, pwd.digest()) is None:
+    if database_helper.check_user(email, pwd.hexdigest()) is None:
         return json.dumps({"success": False, "message": "Wrong username or password."})
 
-    rand = random.random()
-    rand.seed()
-    letters = "abcdefghiklmnopqrstuvwwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-    token = ""
-    for i in range(40):
-        token[i] = letters[rand.randint(0, len(letters)-1)]
+    chars = string.digits + string.ascii_letters
+    token = ''.join(random.choice(chars) for x in range(40))
 
     database_helper.signin_user(token, email)
     return json.dumps({"success": True, "message": "Successfully signed in.", "data": token})
@@ -27,13 +24,15 @@ def sign_in(email, password):
 @app.route('/sign_up/<email>/<password>/<firstname>/<familyname>/<gender>/<city>/<country>')
 def sign_up(email, password, firstname, familyname, gender, city, country):
 
+    print(database_helper.user_exist(email))
+
     if(database_helper.user_exist(email)):
         return json.dumps({"success": False, "message": "User already exists."})
 
     if(not email or not password or not firstname or not familyname or not gender or not city or not country):
         return json.dumps({"success": False, "message": "Formdata not complete."})
 
-    database_helper.add_user(email, hashlib.sha512(password.encode('utf-8')).digest(), firstname, familyname, gender, city, country)
+    database_helper.add_user(email, hashlib.sha512(password.encode('utf-8')).hexdigest(), firstname, familyname, gender, city, country)
 
     return json.dumps({"success": True, "message": "Successfully created a new user."})
 
@@ -54,10 +53,10 @@ def change_password(token, old_password, new_password):
     if user is None:
         return json.dumps({"success": False, "message": "You are not logged in."})
 
-    if database_helper.get_password(user) != hashlib.sha512(old_password.encode('utf-8')).digest():
+    if database_helper.get_password(user) != hashlib.sha512(old_password.encode('utf-8')).hexdigest():
         return json.dumps({"success": False, "message": "Wrong password."})
 
-    database_helper.update_password(user, hashlib.sha512(new_password.encode('utf-8')).digest())
+    database_helper.update_password(user, hashlib.sha512(new_password.encode('utf-8')).hexdigest())
     return json.dumps({"success": True, "message": "Password changed."})
 
 
