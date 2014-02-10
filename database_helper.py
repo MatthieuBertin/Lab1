@@ -30,14 +30,14 @@ def user_exist(email):
     return cur.fetchone()
 
 def signin_user(token, email):
-    get_db().execute('INSERT INTO signed_user VALUES(?,?)', (token, email))
+    get_db().execute('INSERT INTO signed_users VALUES(?,?)', (token, email))
 
 def signout_user(token):
-    get_db().execute('DELETE * FROM signed_user WHERE token=?', (token,))
+    get_db().execute('DELETE * FROM signed_users WHERE token=?', (token,))
 
 def user_signedin(token):
     cur = get_db().cursor()
-    cur.execute('SELECT email FROM signed_user WHERE token=?', (token,))
+    cur.execute('SELECT email FROM signed_users WHERE token=?', (token,))
     return cur.fetchone()
 
 def get_password(email):
