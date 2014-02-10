@@ -16,7 +16,7 @@ def add_user(email, password, firstname, familyname, gender, city, country):
 
 def get_user(email):
     cur = get_db().cursor()
-    cur.execute('SELECT email, firstname, familyname, gender, city, country FROM users WHERE email=?', email)
+    cur.execute('SELECT email, firstname, familyname, gender, city, country FROM users WHERE email=?', (email,))
     return cur.fetchone()
 
 def check_user(email, password):
@@ -26,23 +26,23 @@ def check_user(email, password):
 
 def user_exist(email):
     cur = get_db().cursor()
-    cur.execute('SELECT email FROM users WHERE email=?', email)
+    cur.execute('SELECT email FROM users WHERE email=?', (email,))
     return cur.fetchone()
 
 def signin_user(token, email):
     get_db().execute('INSERT INTO signed_user VALUES(?,?)', (token, email))
 
 def signout_user(token):
-    get_db().execute('DELETE * FROM signed_user WHERE token=?', token)
+    get_db().execute('DELETE * FROM signed_user WHERE token=?', (token,))
 
 def user_signedin(token):
     cur = get_db().cursor()
-    cur.execute('SELECT email FROM signed_user WHERE token=?', token)
+    cur.execute('SELECT email FROM signed_user WHERE token=?', (token,))
     return cur.fetchone()
 
 def get_password(email):
     cur = get_db().cursor()
-    cur.execute('SELECT password FROM users WHERE email=?', email)
+    cur.execute('SELECT password FROM users WHERE email=?', (email,))
     return cur.fetchone()
 
 def update_password(email, newPwd):
@@ -50,7 +50,7 @@ def update_password(email, newPwd):
 
 def get_messages(email):
     cur = get_db().cursor()
-    cur.execute('SELECT sender, content FROM messages WHERE receiver=?', email)
+    cur.execute('SELECT sender, content FROM messages WHERE receiver=?', (email,))
     return cur.fetchall()
 
 def post_message(sender, receiver, content):
