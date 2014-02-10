@@ -11,8 +11,7 @@ app.config['DEBUG'] = True
 def sign_in(email, password):
     pwd = hashlib.sha512()
     pwd.update(password)
-    result = database_helper.check_user(email, pwd.digest())
-    if result is None:
+    if database_helper.check_user(email, pwd.digest()) is None:
         return json.dump({"success": False, "message": "Wrong username or password."})
 
     rand = random.random()
@@ -38,11 +37,16 @@ def sign_up(email, password, firstname, familyname, gender, city, country):
     pwd.update(password)
     database_helper.add_user(email, pwd.digest(), firstname, familyname, gender, city, country)
 
-    pass
+    return json.dump({"success": True, "message": "Successfully created a new user."})
 
 @app.route('/sign_out/<token>')
 def sign_out(token):
-    pass
+    if database_helper.user_signedin(token) is None:
+        return json.dump({"success": False, "message": "You are not signed in."})
+
+    database_helper.signout_user(token)
+    return json.dump({"success": True, "message": "Successfully signed out."})
+
 
 @app.route('/change_password/<token>/<old_password>/<new_password>')
 def change_password(token, old_password, new_password):

@@ -30,6 +30,10 @@ def signin_user(token, email):
 def signout_user(token):
     get_db().execute('DELETE * FROM signed_user WHERE token=?', token)
 
+def user_signedin(token):
+    cur = get_db().cursor()
+    cur.execute('SELECT token FROM signed_user WHERE token=?', token)
+    return cur.fetchone()
 
 def remove_contact(firstname, familyname):
     pass
