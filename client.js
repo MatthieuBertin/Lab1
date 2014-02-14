@@ -184,21 +184,23 @@ function changePwd() {
     document.forms["pwdForm"]["newPwd"].value = '';
     document.forms["pwdForm"]["reNewPwd"].value = '';
   }
-  else { if (newPwd === oldPwd) {
+  else if (newPwd === oldPwd) {
     result.innerHTML = "New password needed";
     document.forms["pwdForm"]["newPwd"].value = '';
     document.forms["pwdForm"]["reNewPwd"].value = '';
   }
   else {
-    serverstub.changePassword(token, oldPwd, newPwd);
-    result.innerHTML = "success";
-    result.style.color = "green";
-    document.forms["pwdForm"]["newPwd"].value = '';
-    document.forms["pwdForm"]["reNewPwd"].value = '';
-    document.forms["pwdForm"]["oldPwd"].value = '';
+    var res = serverstub.changePassword(token, oldPwd, newPwd);
+	if (!res.success)
+		result.innerHTML = res.message;
+	else {
+		result.innerHTML = "Success";
+		result.style.color = "green";
+		document.forms["pwdForm"]["newPwd"].value = '';
+		document.forms["pwdForm"]["reNewPwd"].value = '';
+		document.forms["pwdForm"]["oldPwd"].value = '';
+	}
   }
-  }
-  
 }
 
 //Hide user information

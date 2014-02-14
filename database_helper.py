@@ -38,12 +38,12 @@ def signin_user(token, email):
     get_db().commit();
 
 def signout_user(token):
-    get_db().execute('DELETE * FROM signed_users WHERE token=?', (token,))
+    get_db().execute('DELETE FROM signed_users WHERE token=?', (token,))
     get_db().commit()
 
 def user_signedin(token):
     cur = get_db().cursor()
-    cur.execute('SELECT user FROM signed_users WHERE token=?', (token,))
+    cur.execute('SELECT email FROM signed_users WHERE token=?', (token,))
     return cur.fetchone()
 
 def get_password(email):
@@ -61,5 +61,5 @@ def get_messages(email):
     return cur.fetchall()
 
 def post_message(sender, receiver, content):
-    get_db().execute('INSERT INTO messages VALUES(?,?,?)', (sender, receiver, content))
+    get_db().execute('INSERT INTO messages VALUES(NULL,?,?,?)', (sender, receiver, content))
     get_db().commit()
