@@ -53,10 +53,10 @@ def change_password(token, old_password, new_password):
     if user is None:
         return json.dumps({"success": False, "message": "You are not logged in."})
 
-    if database_helper.get_password(user) != hashlib.sha512(old_password.encode('utf-8')).hexdigest():
+    if database_helper.get_password(user[0]) != hashlib.sha512(old_password.encode('utf-8')).hexdigest():
         return json.dumps({"success": False, "message": "Wrong password."})
 
-    database_helper.update_password(user, hashlib.sha512(new_password.encode('utf-8')).hexdigest())
+    database_helper.update_password(user[0], hashlib.sha512(new_password.encode('utf-8')).hexdigest())
     return json.dumps({"success": True, "message": "Password changed."})
 
 
@@ -70,7 +70,7 @@ def get_user_messages_by_email(token, email):
     if email is None:
         return json.dumps({"success": False, "message": "You are not signed in."})
 
-    data = database_helper.get_messages(email)
+    data = database_helper.get_messages(email[0])
     if data is None:
         return json.dumps({"success": False, "message": "No such user."})
 
@@ -87,11 +87,11 @@ def get_user_data_by_email(token, email):
     if email is None:
         return json.dumps({"success": False, "message": "You are not signed in."})
 
-    data = database_helper.get_user(email)
+    data = database_helper.get_user(email[0])
     if data is None:
         return json.dumps({"success": False, "message": "No such user."})
 
-    return json.dumps({"success": True, "message": "User data retrieved..", "data": data})
+    return json.dumps({"success": True, "message": "User data retrieved..", "data": data[0]})
 
 
 @app.route('/post_message/<token>/<message>/<email>')
@@ -104,7 +104,7 @@ def post_message(token, message, email):
     if database_helper.user_exist(email) is None:
         return json.dumps({"success": False, "message": "No such user."})
 
-    database_helper.post_message(user, email, message)
+    database_helper.post_message(user[0], email, message)
     return json.dumps({"success": True, "message": "Message posted"})
 
 
