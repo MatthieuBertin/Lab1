@@ -62,7 +62,7 @@ def change_password(token, old_password, new_password):
 
 @app.route('/get_user_messages_by_token/<token>')
 def get_user_messages_by_token(token):
-    return get_user_messages_by_email(token, database_helper.user_signedin(token))
+    return get_user_messages_by_email(token, database_helper.user_signedin(token)[0])
 
 
 @app.route('/get_user_messages_by_email/<token>/<email>')
@@ -70,7 +70,7 @@ def get_user_messages_by_email(token, email):
     if email is None:
         return json.dumps({"success": False, "message": "You are not signed in."})
 
-    data = database_helper.get_messages(email[0])
+    data = database_helper.get_messages(email)
     if data is None:
         return json.dumps({"success": False, "message": "No such user."})
 

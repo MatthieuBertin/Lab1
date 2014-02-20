@@ -52,14 +52,14 @@ def get_password(email):
     return cur.fetchone()
 
 def update_password(email, newPwd):
-    get_db().execute('UPDATE users SET password=? WHERE email=?', (newPwd, email))
+    get_db().execute('UPDATE users SET password=? WHERE email=?;', (newPwd, email))
     get_db().commit()
 
 def get_messages(email):
     cur = get_db().cursor()
-    cur.execute('SELECT sender, content FROM messages WHERE receiver=?', (email,))
+    cur.execute("SELECT sender, content FROM messages WHERE receiver=?", (email, ))
     return cur.fetchall()
 
 def post_message(sender, receiver, content):
-    get_db().execute('INSERT INTO messages VALUES(NULL,?,?,?)', (sender, receiver, content))
+    get_db().execute('INSERT INTO messages(sender, receiver, content) VALUES (?,?,?);', (sender, receiver, content))
     get_db().commit()

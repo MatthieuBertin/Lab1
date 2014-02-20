@@ -16,7 +16,6 @@ CREATE TABLE signed_users (
 );
 
 CREATE TABLE messages (
-    id INTEGER PRIMARY KEY,
     sender VARCHAR(40),
     receiver VARCHAR(40),
     content VARCHAR(150)
