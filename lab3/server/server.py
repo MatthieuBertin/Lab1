@@ -4,6 +4,9 @@ import database_helper
 import json
 import random
 import string
+from geventwebsocket.handler import WebSocketHandler
+from gevent.pywsgi import WSGIServer
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -129,4 +132,6 @@ def teardown_app(exception):
     database_helper.close_db()
 
 if __name__ == '__main__':
+    http_server = WSGIServer(('',5000), app, handler_class=WebSocketHandler)
+    http_server.serve_forever()
     app.run()
